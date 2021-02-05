@@ -5,7 +5,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -48,5 +47,9 @@ public class User {
         return Email;
     }
 
-
+    public User(String firstName, String lastName, String email) {
+        this.FirstName = firstName;
+        this.LastName = lastName;
+        this.Email = email;
+    }
 }

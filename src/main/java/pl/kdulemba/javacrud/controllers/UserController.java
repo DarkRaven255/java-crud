@@ -1,14 +1,17 @@
 package pl.kdulemba.javacrud.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.server.ResponseStatusException;
 import pl.kdulemba.javacrud.entities.User;
 import pl.kdulemba.javacrud.repositories.UserRepository;
+
 import javax.validation.Valid;
 
 
@@ -46,15 +49,21 @@ public class UserController {
 
     @GetMapping("/edit/{id}")
     public String editUser(@PathVariable("id") long id, Model model) {
-        model.addAttribute("users", userRepository.findAll());
-        User user = userRepository.findById(id);
+        try {
+            model.addAttribute("users", userRepository.findAll());
+            User user = userRepository.findById(id);
 
-        if (user == null) {
-            throw new IllegalArgumentException("User id does not exist: " + id);
+            if (user == null) {
+                throw new IllegalArgumentException("User id does not exist: " + id);
+            }
+            model.addAttribute("user", user);
+
+            return "update-user";
+        } catch (Exception exc) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "User Not Found", exc);
         }
-        model.addAttribute("user", user);
 
-        return "update-user";
     }
 
     @PostMapping("/update/{id}")
@@ -71,13 +80,19 @@ public class UserController {
 
     @GetMapping("/delete/{id}")
     public String deleteUser(@PathVariable("id") long id, Model model) {
-        User user = userRepository.findById(id);
+        try {
+            User user = userRepository.findById(id);
 
-        if (user == null) {
-            throw new IllegalArgumentException("User id does not exist: " + id);
+            if (user == null) {
+                throw new IllegalArgumentException("User id does not exist: " + id);
+            }
+
+            userRepository.delete(user);
+            return "redirect:/";
+
+        } catch (Exception exc) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "User Not Found", exc);
         }
-
-        userRepository.delete(user);
-        return "redirect:/";
     }
 }

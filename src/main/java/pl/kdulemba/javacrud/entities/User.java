@@ -1,9 +1,11 @@
 package pl.kdulemba.javacrud.entities;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+@Entity
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -14,6 +16,8 @@ public class User {
     private String LastName;
 
     private String Email;
+
+    public User() {}
 
     public void setId(long id) {
         this.id = id;

@@ -26,13 +26,13 @@ public class UserController {
     }
 
     @GetMapping("/")
-    public String showUserList(Model model) {
+    public String getUsers(Model model) {
         model.addAttribute("users", userRepository.findAll());
         return "index";
     }
 
     @GetMapping("/adduser")
-    public String showSignUpForm(@Valid User user, Model model) {
+    public String addUserForm(@Valid User user, Model model) {
         model.addAttribute("users", userRepository.findAll());
         return "add-user";
     }
@@ -48,7 +48,7 @@ public class UserController {
     }
 
     @GetMapping("/edit/{id}")
-    public String editUser(@PathVariable("id") long id, Model model) {
+    public String editUserForm(@PathVariable("id") long id, Model model) {
         try {
             model.addAttribute("users", userRepository.findAll());
             User user = userRepository.findById(id);

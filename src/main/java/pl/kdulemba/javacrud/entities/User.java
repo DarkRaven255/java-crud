@@ -3,19 +3,16 @@ package pl.kdulemba.javacrud.entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "users")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column(name = "f_name")
     private String FirstName;
 
-    @Column(name = "l_name")
     private String LastName;
 
-    @Column(name = "email")
     private String Email;
 
     public User() {

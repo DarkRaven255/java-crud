@@ -22,14 +22,15 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-    @GetMapping("/index")
+    @GetMapping("/")
     public String showUserList(Model model) {
         model.addAttribute("users", userRepository.findAll());
         return "index";
     }
 
     @GetMapping("/adduser")
-    public String showSignUpForm(User user) {
+    public String showSignUpForm(@Valid User user, Model model) {
+        model.addAttribute("users", userRepository.findAll());
         return "add-user";
     }
 
@@ -40,17 +41,17 @@ public class UserController {
         }
 
         userRepository.save(user);
-        return "redirect:/index";
+        return "redirect:/";
     }
 
     @GetMapping("/edit/{id}")
     public String editUser(@PathVariable("id") long id, Model model) {
+        model.addAttribute("users", userRepository.findAll());
         User user = userRepository.findById(id);
 
         if (user == null) {
-            throw new IllegalArgumentException("Bad user id: " + id);
+            throw new IllegalArgumentException("User id does not exist: " + id);
         }
-
         model.addAttribute("user", user);
 
         return "update-user";
@@ -65,7 +66,7 @@ public class UserController {
 
         userRepository.save(user);
 
-        return "redirect:/index";
+        return "redirect:/";
     }
 
     @GetMapping("/delete/{id}")
@@ -73,11 +74,10 @@ public class UserController {
         User user = userRepository.findById(id);
 
         if (user == null) {
-            throw new IllegalArgumentException("Bad user id: " + id);
+            throw new IllegalArgumentException("User id does not exist: " + id);
         }
 
         userRepository.delete(user);
-
-        return "redirect:/index";
+        return "redirect:/";
     }
 }
